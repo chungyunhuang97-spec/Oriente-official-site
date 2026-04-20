@@ -381,8 +381,8 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(44px, 7.5vw, 108px);
+  font-family: 'Noto Sans HK', sans-serif;
+  font-size: clamp(40px, 6.5vw, 96px);
   font-weight: 200;
   color: var(--dust);
   letter-spacing: 0.05em;
@@ -391,8 +391,7 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
 }
 .tp-title span {
   display: inline-block;
-  transition: font-variation-settings 0.04s linear, color 0.15s;
-  will-change: font-variation-settings;
+  transition: font-weight 0.12s ease, letter-spacing 0.12s ease, color 0.12s ease;
   color: var(--dust);
 }
 .tp-sub {
@@ -524,9 +523,10 @@ footer span {
 /* ─── RWD MOBILE ────────────────────────────── */
 @media (max-width: 600px) {
   :root { --nav-h: 58px; }
-  .nav-logo { height: 32px; }
-  .nav-links { gap: 1.2rem; }
-  .nav-links a { font-size: 11px; letter-spacing: 0.1em; }
+  nav { padding: 0 4vw; }
+  .nav-logo { height: 30px; }
+  .nav-links { gap: 0.9rem; }
+  .nav-links a { font-size: 10.5px; letter-spacing: 0.08em; }
   .hero { padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 3.5rem; }
   .hero-scroll { display: none; }
   .mat-strip { display: grid; grid-template-columns: 1fr 1fr; }
@@ -682,7 +682,7 @@ footer span {
 
       <div class="cta-list rise d3">
         <!-- EMAIL -->
-        <a class="cta-row" href="mailto:info@oriente.tw">
+        <a class="cta-row" href="mailto:oriente4919@gmail.com">
           <span class="cta-icon">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="1" y="3" width="14" height="10" rx="1.5" stroke="#1c1710" stroke-width="0.75"/>
@@ -884,12 +884,13 @@ const WORKS = [
 
   const chars = TEXT.split('');
   let mouse   = { x: -9999, y: -9999 };
-  let cur     = { x: -9999, y: -9999 };
+  let smooth  = { x: -9999, y: -9999 };
 
   el.innerHTML = '';
   const spans = chars.map(ch => {
     const s = document.createElement('span');
     s.textContent = ch === ' ' ? '\u00A0' : ch;
+    s.style.transition = 'font-weight 0.12s ease, letter-spacing 0.12s ease, color 0.12s ease';
     el.appendChild(s);
     return s;
   });
@@ -899,37 +900,30 @@ const WORKS = [
     mouse.y = e.clientY;
   });
 
-  // dust colour rgb components for interpolation
   const dustR = 106, dustG = 94, dustB = 82;
   const inkR  = 28,  inkG  = 23, inkB  = 16;
-
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   function animateTP() {
-    cur.x = lerp(cur.x, mouse.x, 0.1);
-    cur.y = lerp(cur.y, mouse.y, 0.1);
+    smooth.x = lerp(smooth.x, mouse.x, 0.1);
+    smooth.y = lerp(smooth.y, mouse.y, 0.1);
 
     const rect    = el.getBoundingClientRect();
-    const maxDist = rect.width * 0.55;
+    const maxDist = Math.max(rect.width, 400) * 0.45;
 
     spans.forEach(span => {
       const r  = span.getBoundingClientRect();
       const cx = r.left + r.width  / 2;
       const cy = r.top  + r.height / 2;
-      const dx = cur.x - cx, dy = cur.y - cy;
-      const d  = Math.sqrt(dx*dx + dy*dy);
-      const t  = Math.max(0, 1 - d / maxDist); // 0=far, 1=close
+      const d  = Math.sqrt((smooth.x - cx) ** 2 + (smooth.y - cy) ** 2);
+      const t  = Math.max(0, 1 - d / maxDist);
 
-      const wght = Math.round(200 + t * 600);  // 200 → 800
-      const wdth = Math.round(75  + t * 50);   // 75  → 125
-
-      span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}`;
-
-      // colour: dust → ink as cursor approaches
-      const r2 = Math.round(lerp(dustR, inkR, t));
-      const g2 = Math.round(lerp(dustG, inkG, t));
-      const b2 = Math.round(lerp(dustB, inkB, t));
-      span.style.color = `rgb(${r2},${g2},${b2})`;
+      // weight: 200 → 700
+      span.style.fontWeight = Math.round(200 + t * 500);
+      // letter-spacing: 0.05em → 0em (compress as cursor nears)
+      span.style.letterSpacing = (0.05 - t * 0.04).toFixed(3) + 'em';
+      // colour: dust → ink
+      span.style.color = `rgb(${Math.round(lerp(dustR,inkR,t))},${Math.round(lerp(dustG,inkG,t))},${Math.round(lerp(dustB,inkB,t))})`;
     });
 
     requestAnimationFrame(animateTP);
