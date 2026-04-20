@@ -166,12 +166,12 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   font-size: 9.5px; letter-spacing: 0.4em;
   color: rgba(249,246,241,0.65); margin-bottom: 1.5rem;
 }
-.hero-title {
-  font-family: 'Noto Sans HK', serif;
-  font-size: clamp(64px,10vw,130px);
-  font-weight: 200; line-height: 0.92; letter-spacing: 0.02em;
-  color: #f9f6f1;
-  font-style: normal;
+.hero-logo-wrap { margin-bottom: 0.5rem; }
+.hero-logo-img {
+  width: clamp(220px, 38vw, 520px);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
 }
 .hero-sub {
   font-size: 14px; font-weight: 300; line-height: 2;
@@ -379,19 +379,20 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 0.15em;
   margin: 0 auto;
   font-family: 'Noto Sans HK', sans-serif;
-  font-size: clamp(40px, 6.5vw, 96px);
-  font-weight: 200;
+  font-size: clamp(36px, 5.5vw, 80px);
+  font-weight: 700;
   color: var(--dust);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.12em;
   white-space: nowrap;
   user-select: none;
+  text-transform: uppercase;
 }
 .tp-title span {
   display: inline-block;
-  transition: font-weight 0.12s ease, letter-spacing 0.12s ease, color 0.12s ease;
   color: var(--dust);
 }
 .tp-sub {
@@ -564,7 +565,9 @@ footer span {
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-tag rise">SOFT FURNISHING · IMPORT MATERIALS</div>
-    <h1 class="hero-title rise d1">Oriente<br>Casa</h1>
+    <div class="hero-logo-wrap rise d1">
+      <img src="images/logo.png" alt="Oriente Casa" class="hero-logo-img">
+    </div>
     <p class="hero-sub rise d2">
       精選進口窗簾、壁紙、皮革與地毯，<br>
       以材質的細節，為每個空間注入靈魂。
@@ -628,7 +631,7 @@ footer span {
 <!-- TEXT PRESSURE BANNER -->
 <div class="tp-section">
   <div class="tp-container">
-    <h2 class="tp-title" id="tpTitle" aria-label="Oriente Casa"></h2>
+    <h2 class="tp-title" aria-label="Oriente Casa">ORIENTE CASA</h2>
     <span class="tp-sub">IMPORT SOFT FURNISHINGS · NEW TAIPEI</span>
   </div>
 </div>
@@ -874,63 +877,9 @@ const WORKS = [
 })();
 
 
-/* ═══════════════════════════════════════
-   TEXT PRESSURE — "Oriente Casa"
-═══════════════════════════════════════ */
-(function() {
-  const TEXT  = 'Oriente Casa';
-  const el    = document.getElementById('tpTitle');
-  if (!el) return;
 
-  const chars = TEXT.split('');
-  let mouse   = { x: -9999, y: -9999 };
-  let smooth  = { x: -9999, y: -9999 };
 
-  el.innerHTML = '';
-  const spans = chars.map(ch => {
-    const s = document.createElement('span');
-    s.textContent = ch === ' ' ? '\u00A0' : ch;
-    s.style.transition = 'font-weight 0.12s ease, letter-spacing 0.12s ease, color 0.12s ease';
-    el.appendChild(s);
-    return s;
-  });
 
-  window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-
-  const dustR = 106, dustG = 94, dustB = 82;
-  const inkR  = 28,  inkG  = 23, inkB  = 16;
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  function animateTP() {
-    smooth.x = lerp(smooth.x, mouse.x, 0.1);
-    smooth.y = lerp(smooth.y, mouse.y, 0.1);
-
-    const rect    = el.getBoundingClientRect();
-    const maxDist = Math.max(rect.width, 400) * 0.45;
-
-    spans.forEach(span => {
-      const r  = span.getBoundingClientRect();
-      const cx = r.left + r.width  / 2;
-      const cy = r.top  + r.height / 2;
-      const d  = Math.sqrt((smooth.x - cx) ** 2 + (smooth.y - cy) ** 2);
-      const t  = Math.max(0, 1 - d / maxDist);
-
-      // weight: 200 → 700
-      span.style.fontWeight = Math.round(200 + t * 500);
-      // letter-spacing: 0.05em → 0em (compress as cursor nears)
-      span.style.letterSpacing = (0.05 - t * 0.04).toFixed(3) + 'em';
-      // colour: dust → ink
-      span.style.color = `rgb(${Math.round(lerp(dustR,inkR,t))},${Math.round(lerp(dustG,inkG,t))},${Math.round(lerp(dustB,inkB,t))})`;
-    });
-
-    requestAnimationFrame(animateTP);
-  }
-
-  animateTP();
-})();
 
 
 /* ═══════════════════════════════════════
