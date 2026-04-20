@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oriente — 進口軟裝材料</title>
+<link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@200;300;400&family=Cormorant+Garamond:wght@200;300&display=swap" rel="stylesheet">
@@ -82,11 +83,10 @@ nav {
   border-bottom: 0.5px solid transparent;
   transition: background .5s, border-color .4s, backdrop-filter .5s;
 }
-/* 頂部漸層陰影，讓 logo 和導覽在亮色圖片上清楚可見 */
 nav::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(20,16,10,0.38) 0%, transparent 100%);
+  background: linear-gradient(to bottom, rgba(20,16,10,0.45) 0%, transparent 100%);
   pointer-events: none; z-index: -1;
   transition: opacity .5s;
 }
@@ -99,27 +99,27 @@ nav.scrolled {
 .nav-logo {
   display: flex; align-items: center;
   text-decoration: none; cursor: none;
-  height: 28px;
+  height: 52px;
 }
 .nav-logo img {
   height: 100%; width: auto;
   filter: brightness(0) invert(1);
-  opacity: 0.9;
+  opacity: 0.95;
   transition: filter .5s, opacity .5s;
 }
 nav.scrolled .nav-logo img {
   filter: brightness(0);
   opacity: 1;
 }
-.nav-links { display: flex; gap: 2.5rem; }
+.nav-links { display: flex; gap: 2.8rem; }
 .nav-links a {
-  font-family: 'Noto Sans HK', sans-serif; font-weight: 200;
-  font-size: 10px; letter-spacing: 0.25em;
-  color: rgba(249,246,241,0.75); text-decoration: none;
+  font-family: 'Noto Sans HK', sans-serif; font-weight: 300;
+  font-size: 13px; letter-spacing: 0.2em;
+  color: rgba(249,246,241,0.9); text-decoration: none;
   transition: color .3s; cursor: none;
 }
 nav.scrolled .nav-links a { color: var(--dust); }
-.nav-links a:hover { color: rgba(249,246,241,1) !important; }
+.nav-links a:hover { color: #fff !important; }
 nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
 
 /* ─── HERO ─────────────────────────────────── */
@@ -256,10 +256,75 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   border: 0.5px solid rgba(160,145,128,.4); padding: 5px 13px;
 }
 
-/* ─── WORKS — Masonry ──────────────────────── */
-.works-wrap { padding: 6rem 0 8rem; background: var(--cream); }
-.works-header { padding: 0 5vw; margin-bottom: 3rem; }
+/* ─── WORKS ─────────────────────────────────── */
+.works-wrap { background: var(--cream); }
+.works-header { padding: 6rem 5vw 3rem; }
 
+/* ── ZOOM PARALLAX (desktop + tablet) ── */
+.zoom-parallax-outer {
+  display: block;
+  position: relative;
+  height: 300vh;
+}
+.zoom-parallax-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.zoom-parallax-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+}
+.zoom-parallax-img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+/* default centre tile */
+.zoom-parallax-layer:nth-child(1) .zoom-parallax-img-wrap {
+  width: 25vw; height: 25vh;
+}
+/* tile 2 — top-left */
+.zoom-parallax-layer:nth-child(2) .zoom-parallax-img-wrap {
+  width: 35vw; height: 30vh;
+  margin-top: -60vh; margin-left: 10vw;
+}
+/* tile 3 — top-right-ish */
+.zoom-parallax-layer:nth-child(3) .zoom-parallax-img-wrap {
+  width: 20vw; height: 45vh;
+  margin-top: -20vh; margin-left: -50vw;
+}
+/* tile 4 — centre-right */
+.zoom-parallax-layer:nth-child(4) .zoom-parallax-img-wrap {
+  width: 25vw; height: 25vh;
+  margin-left: 55vw;
+}
+/* tile 5 — lower-left */
+.zoom-parallax-layer:nth-child(5) .zoom-parallax-img-wrap {
+  width: 20vw; height: 25vh;
+  margin-top: 55vh; margin-left: 10vw;
+}
+/* tile 6 — lower-centre */
+.zoom-parallax-layer:nth-child(6) .zoom-parallax-img-wrap {
+  width: 30vw; height: 25vh;
+  margin-top: 55vh; margin-left: -45vw;
+}
+/* tile 7 — lower-right */
+.zoom-parallax-layer:nth-child(7) .zoom-parallax-img-wrap {
+  width: 15vw; height: 15vh;
+  margin-top: 45vh; margin-left: 50vw;
+}
+.zoom-parallax-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── MASONRY (mobile only) ── */
 .masonry-list {
   position: relative;
   width: 100%;
@@ -267,7 +332,7 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
 .masonry-item {
   position: absolute;
   top: 0; left: 0;
-  padding: 8px;
+  padding: 6px;
   box-sizing: border-box;
   will-change: transform, opacity;
   opacity: 0;
@@ -282,55 +347,68 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   border-radius: 2px;
 }
 
-/* ─── TEXT PRESSURE BANNER ─────────────────── */
+/* show/hide by viewport */
+@media (min-width: 601px) {
+  .zoom-parallax-outer { display: block; }
+  .masonry-list { display: none; }
+}
+@media (max-width: 600px) {
+  .zoom-parallax-outer { display: none; }
+  .masonry-list { display: block; min-height: 600px; padding: 0 4vw; }
+  .works-wrap { padding-bottom: 5rem; }
+}
+
+/* ─── TEXT PRESSURE ─────────────────────────── */
 .tp-section {
-  background: var(--ink);
-  padding: 0;
+  background: transparent;
+  padding: 5rem 0 4rem;
   overflow: hidden;
   position: relative;
 }
 .tp-container {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .tp-title {
   position: relative;
-  width: 90%;
+  width: 92%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 0 auto;
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(48px, 8vw, 110px);
+  font-size: clamp(44px, 7.5vw, 108px);
   font-weight: 200;
-  color: var(--paper);
-  letter-spacing: 0.06em;
+  color: var(--dust);
+  letter-spacing: 0.05em;
   white-space: nowrap;
   user-select: none;
 }
 .tp-title span {
   display: inline-block;
-  transition: font-variation-settings 0.05s linear;
+  transition: font-variation-settings 0.04s linear, color 0.15s;
   will-change: font-variation-settings;
+  color: var(--dust);
 }
 .tp-sub {
   position: absolute;
-  bottom: 1.8rem;
-  right: 5vw;
+  bottom: -1.5rem;
+  right: 4vw;
   font-family: 'Noto Sans HK', sans-serif;
   font-weight: 200;
-  font-size: 9px;
+  font-size: 8.5px;
   letter-spacing: 0.35em;
-  color: rgba(249,246,241,0.35);
+  color: var(--veil);
 }
 
 @media (max-width: 600px) {
-  .tp-container { height: 140px; }
+  .tp-container { height: 110px; }
+  .tp-section { padding: 3.5rem 0 3rem; }
 }
 
 /* ─── SERVICES — redesigned ────────────────── */
@@ -446,8 +524,9 @@ footer span {
 /* ─── RWD MOBILE ────────────────────────────── */
 @media (max-width: 600px) {
   :root { --nav-h: 58px; }
-  .nav-links { gap: 1.4rem; }
-  .nav-links a { font-size: 9px; }
+  .nav-logo { height: 32px; }
+  .nav-links { gap: 1.2rem; }
+  .nav-links a { font-size: 11px; letter-spacing: 0.1em; }
   .hero { padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 3.5rem; }
   .hero-scroll { display: none; }
   .mat-strip { display: grid; grid-template-columns: 1fr 1fr; }
@@ -532,8 +611,16 @@ footer span {
     <div class="sec-tag rise">SELECTED WORKS</div>
     <h2 class="sec-h2 rise d1">精選<em>作品</em></h2>
   </div>
-  <!-- Masonry container — height set by JS -->
-  <div class="masonry-list" id="masonryList" style="min-height:600px; padding: 0 3vw;">
+
+  <!-- ZOOM PARALLAX (desktop + tablet) -->
+  <div class="zoom-parallax-outer" id="zoomParallax">
+    <div class="zoom-parallax-sticky">
+      <!-- layers injected by JS -->
+    </div>
+  </div>
+
+  <!-- MASONRY (mobile) -->
+  <div class="masonry-list" id="masonryList">
     <!-- items injected by JS -->
   </div>
 </section>
@@ -675,108 +762,115 @@ footer span {
 
 <script>
 /* ═══════════════════════════════════════
-   MASONRY
+   WORKS DATA
+═══════════════════════════════════════ */
+const WORKS = [
+  { img: 'images/work01.jpg', label: 'RESIDENTIAL · CURTAIN',  height: 420 },
+  { img: 'images/work02.jpg', label: 'WALLPAPER · LIVING',     height: 300 },
+  { img: 'images/work03.jpg', label: 'CARPET · BEDROOM',       height: 500 },
+  { img: 'images/work04.jpg', label: 'LEATHER · DETAIL',       height: 360 },
+  { img: 'images/work05.jpg', label: 'COMMERCIAL SPACE',       height: 280 },
+  { img: 'images/work06.jpg', label: 'FULL STYLING',           height: 460 },
+  { img: 'images/work07.jpg', label: 'INTERIOR · STYLING',     height: 320 },
+  { img: 'images/work08.jpg', label: 'FABRIC · DETAIL',        height: 380 },
+  { img: 'images/work09.jpg', label: 'RESIDENTIAL · LIVING',   height: 440 },
+];
+
+/* ═══════════════════════════════════════
+   ZOOM PARALLAX (desktop + tablet)
 ═══════════════════════════════════════ */
 (function() {
-  const WORKS = [
-    { img: 'images/work01.jpg', label: 'RESIDENTIAL · CURTAIN',  height: 420 },
-    { img: 'images/work02.jpg', label: 'WALLPAPER · LIVING',     height: 300 },
-    { img: 'images/work03.jpg', label: 'CARPET · BEDROOM',       height: 500 },
-    { img: 'images/work04.jpg', label: 'LEATHER · DETAIL',       height: 360 },
-    { img: 'images/work05.jpg', label: 'COMMERCIAL SPACE',       height: 280 },
-    { img: 'images/work06.jpg', label: 'FULL STYLING',           height: 460 },
-    { img: 'images/work07.jpg', label: 'INTERIOR · STYLING',     height: 320 },
-    { img: 'images/work08.jpg', label: 'FABRIC · DETAIL',        height: 380 },
-    { img: 'images/work09.jpg', label: 'RESIDENTIAL · LIVING',   height: 440 },
-  ];
+  if (window.innerWidth <= 600) return;
 
-  function getColumns() {
-    const w = window.innerWidth;
-    if (w >= 1200) return 4;
-    if (w >= 900)  return 3;
-    if (w >= 560)  return 2;
-    return 1;
+  const sticky = document.querySelector('.zoom-parallax-sticky');
+  if (!sticky) return;
+
+  // scale values per layer (matches ZoomParallax component)
+  const maxScales = [4, 5, 6, 5, 6, 8, 9];
+  const imgs = WORKS.slice(0, 7);
+
+  imgs.forEach((item, i) => {
+    const layer = document.createElement('div');
+    layer.className = 'zoom-parallax-layer';
+    layer.dataset.index = i;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'zoom-parallax-img-wrap';
+
+    const img = document.createElement('img');
+    img.src = item.img;
+    img.alt = item.label;
+    img.loading = 'lazy';
+
+    wrap.appendChild(img);
+    layer.appendChild(wrap);
+    sticky.appendChild(layer);
+  });
+
+  // scroll-driven scale
+  const outer = document.getElementById('zoomParallax');
+  function onScroll() {
+    const rect = outer.getBoundingClientRect();
+    const total = outer.offsetHeight - window.innerHeight;
+    const scrolled = -rect.top;
+    const progress = Math.min(1, Math.max(0, scrolled / total));
+
+    sticky.querySelectorAll('.zoom-parallax-layer').forEach((layer, i) => {
+      const maxS = maxScales[i] || 4;
+      const scale = 1 + (maxS - 1) * progress;
+      layer.style.transform = `scale(${scale})`;
+    });
   }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+/* ═══════════════════════════════════════
+   MASONRY (mobile)
+═══════════════════════════════════════ */
+(function() {
+  if (window.innerWidth > 600) return;
 
   function buildMasonry() {
     const container = document.getElementById('masonryList');
     if (!container) return;
 
-    const totalWidth  = container.offsetWidth;
-    const cols        = getColumns();
-    const gap         = 10;
-    const colWidth    = (totalWidth - gap * (cols - 1)) / cols;
-    const colHeights  = new Array(cols).fill(0);
+    const totalWidth = container.offsetWidth;
+    const cols = 1;
+    const gap = 8;
+    const colWidth = totalWidth;
+    const colHeights = [0];
 
-    // clear
     container.innerHTML = '';
 
     WORKS.forEach((item, i) => {
-      const shortestCol = colHeights.indexOf(Math.min(...colHeights));
-      const x = shortestCol * (colWidth + gap);
-      const y = colHeights[shortestCol];
-      const h = item.height / 2; // scale down heights
-
-      colHeights[shortestCol] += h + gap;
+      const x = 0;
+      const y = colHeights[0];
+      const h = item.height / 2;
+      colHeights[0] += h + gap;
 
       const el = document.createElement('div');
       el.className = 'masonry-item';
-      el.style.cssText = `
-        width: ${colWidth}px;
-        height: ${h}px;
-        transform: translate(${x}px, ${y + 60}px);
-        opacity: 0;
-      `;
-
-      el.innerHTML = `
-        <div class="masonry-img" style="background-image:url('${item.img}'); background-color:#d5cec6;">
-          <div style="
-            position:absolute; inset:0; border-radius:2px;
-            background: linear-gradient(to top, rgba(20,16,10,0.5) 0%, transparent 50%);
-            opacity:0; transition: opacity .5s;
-            display:flex; align-items:flex-end; padding:1rem 1.2rem;
-          " class="masonry-caption">
-            <span style="
-              font-family:'Noto Sans HK',sans-serif; font-weight:200;
-              font-size:8.5px; letter-spacing:0.3em;
-              color:rgba(249,246,241,0.9);
-            ">${item.label}</span>
-          </div>
-        </div>
-      `;
-
-      el.addEventListener('mouseenter', () => {
-        el.querySelector('.masonry-caption').style.opacity = '1';
-      });
-      el.addEventListener('mouseleave', () => {
-        el.querySelector('.masonry-caption').style.opacity = '0';
-      });
-
+      el.style.cssText = `width:${colWidth}px;height:${h}px;transform:translate(${x}px,${y + 50}px);opacity:0;`;
+      el.innerHTML = `<div class="masonry-img" style="background-image:url('${item.img}');background-color:#d5cec6;"></div>`;
       container.appendChild(el);
 
-      // animate in with stagger
       setTimeout(() => {
-        el.style.transition = `transform 0.9s cubic-bezier(.22,1,.36,1) ${i * 0.07}s, opacity 0.7s ease ${i * 0.07}s`;
-        el.style.opacity    = '1';
-        el.style.transform  = `translate(${x}px, ${y}px)`;
+        el.style.transition = `transform .9s cubic-bezier(.22,1,.36,1) ${i*.07}s, opacity .7s ease ${i*.07}s`;
+        el.style.opacity = '1';
+        el.style.transform = `translate(${x}px,${y}px)`;
       }, 120);
     });
 
-    container.style.height = Math.max(...colHeights) + 'px';
+    container.style.height = colHeights[0] + 'px';
   }
 
-  // init
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', buildMasonry);
   } else {
     buildMasonry();
   }
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(buildMasonry, 150);
-  });
 })();
 
 
@@ -784,61 +878,64 @@ footer span {
    TEXT PRESSURE — "Oriente Casa"
 ═══════════════════════════════════════ */
 (function() {
-  const TEXT   = 'Oriente Casa';
-  const el     = document.getElementById('tpTitle');
+  const TEXT  = 'Oriente Casa';
+  const el    = document.getElementById('tpTitle');
   if (!el) return;
 
-  const chars  = TEXT.split('');
-  let mouse    = { x: -9999, y: -9999 };
-  let current  = { x: -9999, y: -9999 };
+  const chars = TEXT.split('');
+  let mouse   = { x: -9999, y: -9999 };
+  let cur     = { x: -9999, y: -9999 };
 
-  // build spans
   el.innerHTML = '';
   const spans = chars.map(ch => {
     const s = document.createElement('span');
     s.textContent = ch === ' ' ? '\u00A0' : ch;
-    s.style.display = 'inline-block';
     el.appendChild(s);
     return s;
   });
 
-  // track mouse
   window.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
   });
 
-  function dist(a, b) {
-    return Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
-  }
+  // dust colour rgb components for interpolation
+  const dustR = 106, dustG = 94, dustB = 82;
+  const inkR  = 28,  inkG  = 23, inkB  = 16;
 
   function lerp(a, b, t) { return a + (b - a) * t; }
 
-  function animate() {
-    current.x = lerp(current.x, mouse.x, 0.1);
-    current.y = lerp(current.y, mouse.y, 0.1);
+  function animateTP() {
+    cur.x = lerp(cur.x, mouse.x, 0.1);
+    cur.y = lerp(cur.y, mouse.y, 0.1);
 
-    const titleRect = el.getBoundingClientRect();
-    const maxDist   = titleRect.width * 0.6;
+    const rect    = el.getBoundingClientRect();
+    const maxDist = rect.width * 0.55;
 
     spans.forEach(span => {
       const r  = span.getBoundingClientRect();
       const cx = r.left + r.width  / 2;
       const cy = r.top  + r.height / 2;
-      const d  = dist(current, { x: cx, y: cy });
+      const dx = cur.x - cx, dy = cur.y - cy;
+      const d  = Math.sqrt(dx*dx + dy*dy);
+      const t  = Math.max(0, 1 - d / maxDist); // 0=far, 1=close
 
-      // weight: 200 (far) → 700 (close)
-      const wght = Math.round(200 + Math.max(0, 1 - d / maxDist) * 500);
-      // width axis: 75 → 125
-      const wdth = Math.round(75  + Math.max(0, 1 - d / maxDist) * 50);
+      const wght = Math.round(200 + t * 600);  // 200 → 800
+      const wdth = Math.round(75  + t * 50);   // 75  → 125
 
       span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}`;
+
+      // colour: dust → ink as cursor approaches
+      const r2 = Math.round(lerp(dustR, inkR, t));
+      const g2 = Math.round(lerp(dustG, inkG, t));
+      const b2 = Math.round(lerp(dustB, inkB, t));
+      span.style.color = `rgb(${r2},${g2},${b2})`;
     });
 
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animateTP);
   }
 
-  animate();
+  animateTP();
 })();
 
 
