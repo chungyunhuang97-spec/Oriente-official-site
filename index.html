@@ -6,7 +6,7 @@
 <title>Oriente — 進口軟裝材料</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@200;300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@200;300;400&family=Cormorant+Garamond:wght@200;300&display=swap" rel="stylesheet">
 <style>
 /* ─── RESET & VARS ─────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -82,23 +82,40 @@ nav {
   border-bottom: 0.5px solid transparent;
   transition: background .5s, border-color .4s, backdrop-filter .5s;
 }
+/* 頂部漸層陰影，讓 logo 和導覽在亮色圖片上清楚可見 */
+nav::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(20,16,10,0.38) 0%, transparent 100%);
+  pointer-events: none; z-index: -1;
+  transition: opacity .5s;
+}
+nav.scrolled::before { opacity: 0; }
 nav.scrolled {
-  background: rgba(249,246,241,0.92);
+  background: rgba(249,246,241,0.94);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   border-bottom-color: var(--line);
 }
 .nav-logo {
-  font-family: 'Noto Sans HK', sans-serif; font-weight: 200;
-  font-size: 18px; letter-spacing: 0.42em;
-  color: rgba(249,246,241,0.9); text-decoration: none; cursor: none;
-  transition: color .5s;
+  display: flex; align-items: center;
+  text-decoration: none; cursor: none;
+  height: 28px;
 }
-nav.scrolled .nav-logo { color: var(--ink); }
+.nav-logo img {
+  height: 100%; width: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  transition: filter .5s, opacity .5s;
+}
+nav.scrolled .nav-logo img {
+  filter: brightness(0);
+  opacity: 1;
+}
 .nav-links { display: flex; gap: 2.5rem; }
 .nav-links a {
   font-family: 'Noto Sans HK', sans-serif; font-weight: 200;
   font-size: 10px; letter-spacing: 0.25em;
-  color: rgba(249,246,241,0.7); text-decoration: none;
+  color: rgba(249,246,241,0.75); text-decoration: none;
   transition: color .3s; cursor: none;
 }
 nav.scrolled .nav-links a { color: var(--dust); }
@@ -150,12 +167,12 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   color: rgba(249,246,241,0.65); margin-bottom: 1.5rem;
 }
 .hero-title {
-  font-family: 'Noto Sans HK', sans-serif;
-  font-size: clamp(54px,9vw,104px);
-  font-weight: 200; line-height: 0.95; letter-spacing: -0.01em;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(64px,10vw,130px);
+  font-weight: 200; line-height: 0.92; letter-spacing: 0.02em;
   color: #f9f6f1;
+  font-style: normal;
 }
-.hero-title em { font-style: normal; color: rgba(249,246,241,0.72); }
 .hero-sub {
   font-size: 14px; font-weight: 300; line-height: 2;
   color: rgba(249,246,241,0.6); max-width: 360px; margin-top: 2.5rem;
@@ -239,87 +256,81 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   border: 0.5px solid rgba(160,145,128,.4); padding: 5px 13px;
 }
 
-/* ─── WORKS — editorial uneven grid ───────── */
-.works-wrap { padding: 6rem 5vw; background: var(--cream); position: relative; }
-.works-header { margin-bottom: 2.5rem; }
+/* ─── WORKS — Masonry ──────────────────────── */
+.works-wrap { padding: 6rem 0 8rem; background: var(--cream); }
+.works-header { padding: 0 5vw; margin-bottom: 3rem; }
 
-/* GRID: magazine uneven layout */
-.works-grid {
-  display: grid;
-  /* col: narrow | wide | narrow */
-  grid-template-columns: 1.15fr 0.9fr 1fr;
-  grid-template-rows: repeat(4, auto);
-  gap: 10px;
+.masonry-list {
+  position: relative;
+  width: 100%;
+}
+.masonry-item {
+  position: absolute;
+  top: 0; left: 0;
+  padding: 8px;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(.22,1,.36,1);
+}
+.masonry-item:hover { transform: scale(0.97); }
+.masonry-img {
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 2px;
+}
+
+/* ─── TEXT PRESSURE BANNER ─────────────────── */
+.tp-section {
+  background: var(--ink);
+  padding: 0;
+  overflow: hidden;
   position: relative;
 }
-
-/* card placement — editorial sizes */
-.wc1 { grid-column: 1; grid-row: 1 / 3; }
-.wc2 { grid-column: 2; grid-row: 1; }
-.wc3 { grid-column: 3; grid-row: 1 / 3; }
-.wc4 { grid-column: 2; grid-row: 2; }
-.wc5 { grid-column: 1 / 3; grid-row: 3; }
-.wc6 { grid-column: 3; grid-row: 3; }
-
-.wc1 { aspect-ratio: 3/4.2; }
-.wc2 { aspect-ratio: 4/3; }
-.wc3 { aspect-ratio: 3/4.2; }
-.wc4 { aspect-ratio: 4/3; }
-.wc5 { aspect-ratio: 16/7; }
-.wc6 { aspect-ratio: 3/4; }
-
-/* card base */
-.work-card {
-  position: relative; overflow: hidden;
-  cursor: default; will-change: transform;
+.tp-container {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tp-title {
+  position: relative;
+  width: 90%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 8vw, 110px);
+  font-weight: 200;
+  color: var(--paper);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  user-select: none;
+}
+.tp-title span {
+  display: inline-block;
+  transition: font-variation-settings 0.05s linear;
+  will-change: font-variation-settings;
+}
+.tp-sub {
+  position: absolute;
+  bottom: 1.8rem;
+  right: 5vw;
+  font-family: 'Noto Sans HK', sans-serif;
+  font-weight: 200;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: rgba(249,246,241,0.35);
 }
 
-.wbg {
-  position: absolute; inset: 0;
-  background-size: cover !important;
-  background-position: center !important;
-  transition: transform 1s cubic-bezier(.22,1,.36,1);
-}
-.work-card:hover .wbg { transform: scale(1.07); }
-
-/* per-card placeholder tones */
-.wc1 .wbg { background: linear-gradient(155deg,#e0d6c8,#cdbfaa); }
-.wc2 .wbg { background: linear-gradient(142deg,#dbd5cb,#c9beaf); }
-.wc3 .wbg { background: linear-gradient(160deg,#d9d2c5,#c6baab); }
-.wc4 .wbg { background: linear-gradient(138deg,#dad5cb,#c8bfb0); }
-.wc5 .wbg { background: linear-gradient(165deg,#d5cec1,#c2b8a7); }
-.wc6 .wbg { background: linear-gradient(150deg,#d3ccc0,#c0b6a5); }
-
-/* grain on each card */
-.wbg::after {
-  content: '';
-  position: absolute; inset: 0; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='wg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23wg)'/%3E%3C/svg%3E");
-  background-size: 150px;
-  opacity: 0.10;
-}
-
-.work-ph {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  font-family: 'Noto Sans HK', sans-serif; font-weight: 200;
-  font-size: 9.5px; letter-spacing: .2em;
-  color: rgba(28,23,16,.25); pointer-events: none; z-index: 2;
-}
-
-/* HOVER REVEAL — slide-up caption bar */
-.work-reveal {
-  position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
-  padding: 0 1.25rem;
-  background: rgba(28,23,16,0.55);
-  height: 0; overflow: hidden;
-  transition: height .5s cubic-bezier(.22,1,.36,1);
-  display: flex; align-items: center; justify-content: center;
-}
-.work-card:hover .work-reveal { height: 40px; }
-.work-reveal-label {
-  font-family: 'Noto Sans HK', sans-serif; font-weight: 200;
-  font-size: 8.5px; letter-spacing: 0.3em; color: rgba(249,246,241,0.75);
+@media (max-width: 600px) {
+  .tp-container { height: 140px; }
 }
 
 /* ─── SERVICES — redesigned ────────────────── */
@@ -428,14 +439,6 @@ footer span {
   .about-grid { grid-template-columns: 1fr; }
   .about-visual { min-height: 320px; }
   .about-text { padding: 3.5rem 2rem; }
-  .works-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto;
-  }
-  .wc1,.wc2,.wc3,.wc4,.wc5,.wc6 {
-    grid-column: unset; grid-row: unset;
-    aspect-ratio: 4/3;
-  }
   .srv-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
 }
@@ -451,20 +454,6 @@ footer span {
   .mat:nth-child(2) { border-right: none; }
   .mat:nth-child(3) { border-top: 0.5px solid var(--line); }
   .mat:nth-child(4) { border-top: 0.5px solid var(--line); border-right: none; }
-  /* mobile works: horizontal snap */
-  .works-grid {
-    display: flex; flex-wrap: nowrap;
-    overflow-x: auto; scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 10px; padding-bottom: .75rem;
-  }
-  .works-grid::-webkit-scrollbar { height: 2px; }
-  .works-grid::-webkit-scrollbar-thumb { background: var(--line); }
-  .wc1,.wc2,.wc3,.wc4,.wc5,.wc6 {
-    flex: 0 0 78vw; scroll-snap-align: start;
-    aspect-ratio: 3/4 !important;
-    grid-column: unset; grid-row: unset;
-  }
   .srv-grid { grid-template-columns: 1fr; }
   .srv-item { padding: 2rem 1.5rem 2.5rem; }
   .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -479,7 +468,9 @@ footer span {
 
 <!-- NAV -->
 <nav id="nav" class="fadein">
-  <a class="nav-logo" href="#">Oriente</a>
+  <a class="nav-logo" href="#">
+    <img src="images/logo.png" alt="Oriente">
+  </a>
   <div class="nav-links">
     <a href="#about">About</a>
     <a href="#works">Works</a>
@@ -494,7 +485,7 @@ footer span {
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-tag rise">SOFT FURNISHING · IMPORT MATERIALS</div>
-    <h1 class="hero-title rise d1">為空間<br>注入<em> 東方</em><br>的溫潤</h1>
+    <h1 class="hero-title rise d1">Oriente<br>Casa</h1>
     <p class="hero-sub rise d2">
       精選進口窗簾、壁紙、皮革與地毯，<br>
       以材質的細節，為每個空間注入靈魂。
@@ -541,33 +532,19 @@ footer span {
     <div class="sec-tag rise">SELECTED WORKS</div>
     <h2 class="sec-h2 rise d1">精選<em>作品</em></h2>
   </div>
-  <div class="works-grid">
-    <div class="work-card wc1 rise d1">
-      <div class="wbg"></div><span class="work-ph">作品 01</span>
-      <div class="work-reveal"><span class="work-reveal-label">RESIDENTIAL · CURTAIN</span></div>
-    </div>
-    <div class="work-card wc2 rise d2">
-      <div class="wbg"></div><span class="work-ph">作品 02</span>
-      <div class="work-reveal"><span class="work-reveal-label">WALLPAPER · LIVING</span></div>
-    </div>
-    <div class="work-card wc3 rise d3">
-      <div class="wbg"></div><span class="work-ph">作品 03</span>
-      <div class="work-reveal"><span class="work-reveal-label">CARPET · BEDROOM</span></div>
-    </div>
-    <div class="work-card wc4 rise d4">
-      <div class="wbg"></div><span class="work-ph">作品 04</span>
-      <div class="work-reveal"><span class="work-reveal-label">LEATHER · DETAIL</span></div>
-    </div>
-    <div class="work-card wc5 rise d5">
-      <div class="wbg"></div><span class="work-ph">作品 05</span>
-      <div class="work-reveal"><span class="work-reveal-label">COMMERCIAL SPACE</span></div>
-    </div>
-    <div class="work-card wc6 rise d6">
-      <div class="wbg"></div><span class="work-ph">作品 06</span>
-      <div class="work-reveal"><span class="work-reveal-label">FULL STYLING</span></div>
-    </div>
+  <!-- Masonry container — height set by JS -->
+  <div class="masonry-list" id="masonryList" style="min-height:600px; padding: 0 3vw;">
+    <!-- items injected by JS -->
   </div>
 </section>
+
+<!-- TEXT PRESSURE BANNER -->
+<div class="tp-section">
+  <div class="tp-container">
+    <h2 class="tp-title" id="tpTitle" aria-label="Oriente Casa"></h2>
+    <span class="tp-sub">IMPORT SOFT FURNISHINGS · NEW TAIPEI</span>
+  </div>
+</div>
 
 <!-- SERVICES -->
 <section id="services" class="services-wrap">
@@ -697,7 +674,177 @@ footer span {
 </footer>
 
 <script>
-/* SCROLL REVEAL */
+/* ═══════════════════════════════════════
+   MASONRY
+═══════════════════════════════════════ */
+(function() {
+  const WORKS = [
+    { img: 'images/work01.jpg', label: 'RESIDENTIAL · CURTAIN',  height: 420 },
+    { img: 'images/work02.jpg', label: 'WALLPAPER · LIVING',     height: 300 },
+    { img: 'images/work03.jpg', label: 'CARPET · BEDROOM',       height: 500 },
+    { img: 'images/work04.jpg', label: 'LEATHER · DETAIL',       height: 360 },
+    { img: 'images/work05.jpg', label: 'COMMERCIAL SPACE',       height: 280 },
+    { img: 'images/work06.jpg', label: 'FULL STYLING',           height: 460 },
+    { img: 'images/work07.jpg', label: 'INTERIOR · STYLING',     height: 320 },
+    { img: 'images/work08.jpg', label: 'FABRIC · DETAIL',        height: 380 },
+    { img: 'images/work09.jpg', label: 'RESIDENTIAL · LIVING',   height: 440 },
+  ];
+
+  function getColumns() {
+    const w = window.innerWidth;
+    if (w >= 1200) return 4;
+    if (w >= 900)  return 3;
+    if (w >= 560)  return 2;
+    return 1;
+  }
+
+  function buildMasonry() {
+    const container = document.getElementById('masonryList');
+    if (!container) return;
+
+    const totalWidth  = container.offsetWidth;
+    const cols        = getColumns();
+    const gap         = 10;
+    const colWidth    = (totalWidth - gap * (cols - 1)) / cols;
+    const colHeights  = new Array(cols).fill(0);
+
+    // clear
+    container.innerHTML = '';
+
+    WORKS.forEach((item, i) => {
+      const shortestCol = colHeights.indexOf(Math.min(...colHeights));
+      const x = shortestCol * (colWidth + gap);
+      const y = colHeights[shortestCol];
+      const h = item.height / 2; // scale down heights
+
+      colHeights[shortestCol] += h + gap;
+
+      const el = document.createElement('div');
+      el.className = 'masonry-item';
+      el.style.cssText = `
+        width: ${colWidth}px;
+        height: ${h}px;
+        transform: translate(${x}px, ${y + 60}px);
+        opacity: 0;
+      `;
+
+      el.innerHTML = `
+        <div class="masonry-img" style="background-image:url('${item.img}'); background-color:#d5cec6;">
+          <div style="
+            position:absolute; inset:0; border-radius:2px;
+            background: linear-gradient(to top, rgba(20,16,10,0.5) 0%, transparent 50%);
+            opacity:0; transition: opacity .5s;
+            display:flex; align-items:flex-end; padding:1rem 1.2rem;
+          " class="masonry-caption">
+            <span style="
+              font-family:'Noto Sans HK',sans-serif; font-weight:200;
+              font-size:8.5px; letter-spacing:0.3em;
+              color:rgba(249,246,241,0.9);
+            ">${item.label}</span>
+          </div>
+        </div>
+      `;
+
+      el.addEventListener('mouseenter', () => {
+        el.querySelector('.masonry-caption').style.opacity = '1';
+      });
+      el.addEventListener('mouseleave', () => {
+        el.querySelector('.masonry-caption').style.opacity = '0';
+      });
+
+      container.appendChild(el);
+
+      // animate in with stagger
+      setTimeout(() => {
+        el.style.transition = `transform 0.9s cubic-bezier(.22,1,.36,1) ${i * 0.07}s, opacity 0.7s ease ${i * 0.07}s`;
+        el.style.opacity    = '1';
+        el.style.transform  = `translate(${x}px, ${y}px)`;
+      }, 120);
+    });
+
+    container.style.height = Math.max(...colHeights) + 'px';
+  }
+
+  // init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildMasonry);
+  } else {
+    buildMasonry();
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildMasonry, 150);
+  });
+})();
+
+
+/* ═══════════════════════════════════════
+   TEXT PRESSURE — "Oriente Casa"
+═══════════════════════════════════════ */
+(function() {
+  const TEXT   = 'Oriente Casa';
+  const el     = document.getElementById('tpTitle');
+  if (!el) return;
+
+  const chars  = TEXT.split('');
+  let mouse    = { x: -9999, y: -9999 };
+  let current  = { x: -9999, y: -9999 };
+
+  // build spans
+  el.innerHTML = '';
+  const spans = chars.map(ch => {
+    const s = document.createElement('span');
+    s.textContent = ch === ' ' ? '\u00A0' : ch;
+    s.style.display = 'inline-block';
+    el.appendChild(s);
+    return s;
+  });
+
+  // track mouse
+  window.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  function dist(a, b) {
+    return Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function animate() {
+    current.x = lerp(current.x, mouse.x, 0.1);
+    current.y = lerp(current.y, mouse.y, 0.1);
+
+    const titleRect = el.getBoundingClientRect();
+    const maxDist   = titleRect.width * 0.6;
+
+    spans.forEach(span => {
+      const r  = span.getBoundingClientRect();
+      const cx = r.left + r.width  / 2;
+      const cy = r.top  + r.height / 2;
+      const d  = dist(current, { x: cx, y: cy });
+
+      // weight: 200 (far) → 700 (close)
+      const wght = Math.round(200 + Math.max(0, 1 - d / maxDist) * 500);
+      // width axis: 75 → 125
+      const wdth = Math.round(75  + Math.max(0, 1 - d / maxDist) * 50);
+
+      span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}`;
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+})();
+
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
 const io = new IntersectionObserver(e => {
   e.forEach(x => { if(x.isIntersecting){ x.target.classList.add('vis'); io.unobserve(x.target); } });
 }, { threshold: 0.07, rootMargin: '0px 0px -32px 0px' });
@@ -713,33 +860,15 @@ window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrol
 /* CUSTOM CURSOR */
 const cur = document.getElementById('cur');
 const curTxt = document.getElementById('cur-txt');
-let mx=-200, my=-200, cx=-200, cy=-200;
+let mx=-200, my=-200, cx2=-200, cy2=-200;
 if (window.matchMedia('(pointer:fine)').matches) {
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  (function tick(){ cx+=(mx-cx)*.13; cy+=(my-cy)*.13;
-    cur.style.left=cx+'px'; cur.style.top=cy+'px';
-    curTxt.style.left=cx+'px'; curTxt.style.top=(cy+30)+'px';
+  (function tick(){ cx2+=(mx-cx2)*.13; cy2+=(my-cy2)*.13;
+    cur.style.left=cx2+'px'; cur.style.top=cy2+'px';
+    curTxt.style.left=cx2+'px'; curTxt.style.top=(cy2+30)+'px';
     requestAnimationFrame(tick); })();
-}
-
-/* TILT */
-if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-  document.querySelectorAll('.work-card').forEach(c => {
-    c.addEventListener('mousemove', e => {
-      const r = c.getBoundingClientRect();
-      const x = (e.clientX-r.left)/r.width-.5;
-      const y = (e.clientY-r.top)/r.height-.5;
-      c.style.transform = `perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) scale(1.02)`;
-      c.style.transition = 'transform .08s ease';
-      c.style.zIndex = 5;
-    });
-    c.addEventListener('mouseleave', () => {
-      c.style.transform = 'perspective(800px) rotateY(0) rotateX(0) scale(1)';
-      c.style.transition = 'transform .6s cubic-bezier(.22,1,.36,1)';
-      c.style.zIndex = '';
-    });
-  });
 }
 </script>
 </body>
 </html>
+
