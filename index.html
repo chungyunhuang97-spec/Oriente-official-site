@@ -358,59 +358,11 @@ nav.scrolled .nav-links a:hover { color: var(--ink) !important; }
   .works-wrap { padding-bottom: 5rem; }
 }
 
-/* ─── MARQUEE LOGO WALL ─────────────────────── */
-.marquee-section {
-  padding: 4.5rem 0;
-  overflow: hidden;
-  background: var(--cream);
-  border-top: 0.5px solid var(--line);
-  border-bottom: 0.5px solid var(--line);
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee-scroll 28s linear infinite;
-}
-.marquee-track:hover { animation-play-state: paused; }
-.marquee-item {
-  flex-shrink: 0;
-  padding: 0 6vw;
-  display: flex;
-  align-items: center;
-}
-.marquee-item img {
-  height: clamp(44px, 5vw, 72px);
-  width: auto;
-  opacity: 0.45;
-  filter: brightness(0);
-  transition: opacity 0.3s;
-}
-.marquee-track:hover .marquee-item img { opacity: 0.7; }
-@keyframes marquee-scroll {
-  0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-/* ─── FOOTER BRAND LINE ─────────────────────── */
-.footer-brand {
-  padding: 2.2rem 5vw;
-  border-top: 0.5px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.footer-brand span {
-  font-family: 'Noto Sans HK', sans-serif;
-  font-weight: 300;
-  font-size: clamp(13px, 1.4vw, 18px);
-  letter-spacing: 0.55em;
-  color: var(--veil);
-  text-transform: uppercase;
-}
 
 @media (max-width: 600px) {
-  .marquee-item { padding: 0 10vw; }
-  .marquee-item img { height: 36px; }
 }
 
 /* ─── SERVICES — redesigned ────────────────── */
@@ -521,8 +473,6 @@ footer span {
   .about-text { padding: 3.5rem 2rem; }
   .srv-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .marquee-section { display: none; }
-  .footer-brand { display: none; }
 }
 
 /* ─── RWD MOBILE ────────────────────────────── */
@@ -542,8 +492,6 @@ footer span {
   .srv-item { padding: 2rem 1.5rem 2.5rem; }
   .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .works-wrap, .services-wrap, .contact-wrap { padding: 4rem 5vw; }
-  .marquee-section { display: none; }
-  .footer-brand { display: none; }
 }
 </style>
 </head>
@@ -554,14 +502,14 @@ footer span {
 
 <!-- NAV -->
 <nav id="nav" class="fadein">
-  <a class="nav-logo" href="javascript:void(0)" data-target="#">
+  <a class="nav-logo" href="#">
     <img src="images/logo.png" alt="Oriente">
   </a>
   <div class="nav-links">
-    <a href="javascript:void(0)" data-target="#about">About</a>
-    <a href="javascript:void(0)" data-target="#works">Works</a>
-    <a href="javascript:void(0)" data-target="#services">Services</a>
-    <a href="javascript:void(0)" data-target="#contact">Contact</a>
+    <a href="#about">About</a>
+    <a href="#works">Works</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
   </div>
 </nav>
 
@@ -578,7 +526,7 @@ footer span {
       精選進口窗簾、壁紙、皮革與地毯，<br>
       以材質的細節，為每個空間注入靈魂。
     </p>
-    <a class="hero-cta rise d3" href="javascript:void(0)" data-target="#works">探索作品 →</a>
+    <a class="hero-cta rise d3" href="#works">探索作品 →</a>
   </div>
   <div class="hero-scroll">
     <div class="scroll-bar"></div>
@@ -633,26 +581,6 @@ footer span {
     <!-- items injected by JS -->
   </div>
 </section>
-
-<!-- MARQUEE LOGO WALL -->
-<div class="marquee-section">
-  <div class="marquee-track" id="marqueeTrack">
-    <!-- set A -->
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <!-- set B (duplicate for seamless loop) -->
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-    <div class="marquee-item"><img src="images/logo.png" alt="Oriente"></div>
-  </div>
-</div>
 
 <!-- SERVICES -->
 <section id="services" class="services-wrap">
@@ -780,9 +708,6 @@ footer span {
   <span>© 2025 Oriente · New Taipei City</span>
   <span>進口軟裝材料</span>
 </footer>
-<div class="footer-brand">
-  <span>Oriente Casa</span>
-</div>
 
 <script>
 /* ═══════════════════════════════════════
@@ -918,46 +843,29 @@ setTimeout(() => {
 const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', scrollY > 40), { passive: true });
 
-/* ── SMOOTH SCROLL (nav + CTA) — data-target 避開手機原生 anchor 跳轉 ── */
-let scrollRAF = null;
-
-function smoothScrollTo(targetY, duration) {
-  if (scrollRAF) cancelAnimationFrame(scrollRAF);
-  const startY = window.scrollY;
-  const diff = targetY - startY;
-  let startTime = null;
-  function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+/* ── SMOOTH SCROLL ── */
+let _raf = null;
+function scrollTo2(targetY, ms) {
+  if (_raf) cancelAnimationFrame(_raf);
+  const startY = window.pageYOffset;
+  const dist = targetY - startY;
+  let t0 = null;
+  function ease(t){ return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
+  function step(now){
+    if(!t0) t0=now;
+    const pct = Math.min((now-t0)/ms, 1);
+    window.scrollTo(0, startY + dist * ease(pct));
+    if(pct<1) _raf = requestAnimationFrame(step);
   }
-  function step(ts) {
-    if (!startTime) startTime = ts;
-    const p = Math.min((ts - startTime) / duration, 1);
-    const y = startY + diff * easeInOutCubic(p);
-    window.scrollTo({ top: y, behavior: 'instant' });
-    if (p < 1) scrollRAF = requestAnimationFrame(step);
-  }
-  scrollRAF = requestAnimationFrame(step);
+  _raf = requestAnimationFrame(step);
 }
-
-function doScroll(targetAttr) {
-  if (!targetAttr || targetAttr === '#') { smoothScrollTo(0, 1600); return; }
-  const target = document.querySelector(targetAttr);
-  if (target) {
-    const top = target.getBoundingClientRect().top + window.scrollY;
-    smoothScrollTo(top, 1600); // ms，可調整
-  }
-}
-
-document.querySelectorAll('a[data-target]').forEach(link => {
-  let didTouch = false;
-  link.addEventListener('touchend', () => {
-    didTouch = true;
-    doScroll(link.dataset.target);
-    setTimeout(() => { didTouch = false; }, 600);
-  }, { passive: true });
-  link.addEventListener('click', () => {
-    if (didTouch) return; // 手機 touchend 已處理，略過 click
-    doScroll(link.dataset.target);
+document.querySelectorAll('.nav-links a, a.hero-cta, a.nav-logo').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var href = a.getAttribute('href');
+    if(!href || href==='javascript:void(0)') return;
+    if(href==='#'){ e.preventDefault(); scrollTo2(0,1800); return; }
+    var el = document.querySelector(href);
+    if(el){ e.preventDefault(); scrollTo2(el.getBoundingClientRect().top + window.pageYOffset, 1800); }
   });
 });
 
