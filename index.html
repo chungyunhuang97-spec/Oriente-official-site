@@ -521,6 +521,8 @@ footer span {
   .about-text { padding: 3.5rem 2rem; }
   .srv-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .marquee-section { display: none; }
+  .footer-brand { display: none; }
 }
 
 /* ─── RWD MOBILE ────────────────────────────── */
@@ -540,6 +542,8 @@ footer span {
   .srv-item { padding: 2rem 1.5rem 2.5rem; }
   .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .works-wrap, .services-wrap, .contact-wrap { padding: 4rem 5vw; }
+  .marquee-section { display: none; }
+  .footer-brand { display: none; }
 }
 </style>
 </head>
@@ -929,8 +933,7 @@ function smoothScrollTo(targetY, duration) {
     if (!startTime) startTime = ts;
     const p = Math.min((ts - startTime) / duration, 1);
     const y = startY + diff * easeInOutCubic(p);
-    document.documentElement.scrollTop = y;
-    document.body.scrollTop = y;
+    window.scrollTo({ top: y, behavior: 'instant' });
     if (p < 1) scrollRAF = requestAnimationFrame(step);
   }
   scrollRAF = requestAnimationFrame(step);
@@ -946,8 +949,16 @@ function doScroll(targetAttr) {
 }
 
 document.querySelectorAll('a[data-target]').forEach(link => {
-  link.addEventListener('click', () => doScroll(link.dataset.target));
-  link.addEventListener('touchend', () => doScroll(link.dataset.target), { passive: true });
+  let didTouch = false;
+  link.addEventListener('touchend', () => {
+    didTouch = true;
+    doScroll(link.dataset.target);
+    setTimeout(() => { didTouch = false; }, 600);
+  }, { passive: true });
+  link.addEventListener('click', () => {
+    if (didTouch) return; // 手機 touchend 已處理，略過 click
+    doScroll(link.dataset.target);
+  });
 });
 
 /* CUSTOM CURSOR */
