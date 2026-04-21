@@ -943,7 +943,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     if (target) {
       e.preventDefault();
       const top = target.getBoundingClientRect().top + window.scrollY;
-      smoothScrollTo(top, 1400); // 1400ms = 慢速滾動，可自行調整此數值
+      smoothScrollTo(top, 1600); // 1400ms = 慢速滾動，可自行調整此數值
     }
   });
 });
